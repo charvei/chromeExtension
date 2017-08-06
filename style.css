@@ -1,0 +1,35 @@
+/*
+#watch-description {
+    color: blue;
+}
+
+#timestamp-button .yt-uix-button-icon {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    display: inline-block;
+    color: rgb(140, 140, 140);
+  background: url('chrome-extension://__MSG_@@extension_id__/images/enabled_logo.png');
+  background-repeat : no-repeat;
+  background-position : center center;
+}
+*/
+#timestamp-button.timestamps-activated .yt-uix-button-icon {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    display: inline-block;
+    color: rgb(140, 140, 140);
+ /* background: url(//s.ytimg.com/yts/imgbin/www-hitchhiker-vfl87ArTO.webp) -134px -231px no-repeat;*/
+    background: url('chrome-extension://__MSG_@@extension_id__/images/enabled_logo.png');
+}
+
+#timestamp-button .yt-uix-button-icon {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    display: inline-block;
+    color: rgb(140, 140, 140);
+ /* background: url(//s.ytimg.com/yts/imgbin/www-hitchhiker-vfl87ArTO.webp) -134px -231px no-repeat;*/
+    background: url('chrome-extension://__MSG_@@extension_id__/images/disabled_logo.png');
+}
