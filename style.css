@@ -14,6 +14,64 @@
   background-position : center center;
 }
 */
+
+div.timestampcomment {
+    overflow : hidden;
+    display: none; 
+    background-color:rgba(0, 0, 0, 0.7); 
+    border-radius: 2px; 
+    padding-left: 5px; 
+    padding-right: 5px; 
+    transform: translate(-50%, 0); 
+    left : 50%; 
+    font-size: 16px; 
+    font-family: Arial; 
+    position: absolute;
+    z-index: 24;
+    height: auto;
+    max-width: 80%;
+    min-width: 50%;
+    /*width:80%;*/
+    line-height: 20px;
+    bottom : 40px;
+    line-height: 20px;
+    padding : 5px;
+}
+
+div.commentAuthor {
+    color : white;
+    clear : right;
+    padding : 2px;
+    border-style : solid;
+    border-color : grey;
+    border-width : 0px 0px 1px 0px;
+}
+
+div.commentText {
+    color : white;
+    clear : left;
+    padding : 2px;
+}
+
+div.commentMessage {
+    float : left;
+    width : 85%;
+    padding : 5px;
+}
+
+div.commentDisplayPic {
+    float : left;
+    display : block;
+    min-width : 25px;
+    width : 10%;
+    margin : 0 auto;
+}
+
+div.commentDisplayPic > img {
+    width : 100%;
+    height : 100%;
+}
+
 #timestamp-button.timestamps-activated .yt-uix-button-icon {
     width: 20px;
     height: 20px;

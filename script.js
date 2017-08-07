@@ -129,7 +129,7 @@ function parseResponseForStamps(response) {
 function makeTimeStampElements() {
 	for (j=0; j<timeStampComments.length; j++) {
 		var id = "" + j;
-		makeDivForTimeStamp(id, timeStampComments[j][0], timeStampComments[j][1], timeStampComments[j][6]);
+		makeDivForTimeStamp(id, timeStampComments[j][0], timeStampComments[j][1], timeStampComments[j][6], timeStampComments[j][3]);
 	}
 }
 
@@ -141,18 +141,29 @@ function popTimeStampElements() {
 		timeStamp.push(jarray);
 		timeStampRecord.push(timeStamp);
 		console.log(timeStampRecord);
-		makeDivForTimeStamp(id, timeStamp[0], timeStamp[1], timeStamp[6]);
+		makeDivForTimeStamp(id, timeStamp[0], timeStamp[1], timeStamp[6], timeStamp[3]);
 	}
 }
 
 //Construct a div for a given timestamp
-function makeDivForTimeStamp(timeStampId, author, text, timeStamp) {
+function makeDivForTimeStamp(timeStampId, author, text, timeStamp, displayPic) {
 	var videoDuration = $("#movie_player > div.html5-video-container > video").prop("duration");
 	var timeStampXPos = (timeStamp/videoDuration)*100;
 
 	console.log("TIMESTAMP AND VIDEODURATION: " + timeStamp + ", " + videoDuration);
 
-	$('<div id=timeStamp' + timeStampId + ' class="ytp-paid-content-overlay timestampcomment" aria-live="assertive" aria-atomic="true" data-layer="4" style="display: none; background-color:rgba(0, 0, 0, 0.7); border-radius: 5px; padding-left: 5px; padding-right: 5px; transform: translate(-50%, 0); left : 50%; font-size: 16px; font-family: Arial; position: absolute; z-index: 24; height: auto;">' + author + ': ' + text + '</div>').appendTo("div#movie_player");
+	//The Div containing message to be displayed @ timestamp time.
+	$('<div id=timeStamp' + timeStampId + ' class="ytp-paid-content-overlay timestampcomment" aria-live="assertive" aria-atomic="true" data-layer="4">' + '</div>').appendTo("div#movie_player");
+	console.log("display pic ->" + displayPic);
+	$('<div class="commentDisplayPic">' + '<img src=' + displayPic + '></div>').appendTo('div#timeStamp' + timeStampId + '');
+	$('<div class="commentMessage"></div>').appendTo('div#timeStamp' + timeStampId + '');
+	$('<div class="commentAuthor">' + author + ' said:</div>').appendTo('div#timeStamp' + timeStampId + '> div.commentMessage');
+	$('<div class="commentText">' + text + '</div>').appendTo('div#timeStamp' + timeStampId + '> div.commentMessage');
+
+
+	//This WORKS. Is the Div containing message to be displayed @ timestamp time.
+//	$('<div id=timeStamp' + timeStampId + ' class="ytp-paid-content-overlay timestampcomment" aria-live="assertive" aria-atomic="true" data-layer="4" style="display: none; background-color:rgba(0, 0, 0, 0.7); border-radius: 5px; padding-left: 5px; padding-right: 5px; transform: translate(-50%, 0); left : 50%; font-size: 16px; font-family: Arial; position: absolute; z-index: 24; height: auto;">' + author + ': ' + text + '</div>').appendTo("div#movie_player");
+
 	$('<div id=timeStampPosition' + timeStampId + ' class="ytp-ad-progress timestampmarker" style="left:' + timeStampXPos + '%; width: 6px; background: #0fb707;"></div>').appendTo("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar > div.ytp-progress-list");
 }
 
@@ -217,7 +228,7 @@ function checkVideoCurrentTimePeriodically(){
 					console.log("TIMESTAMP #" + i + " SHOULD BE SHOWN NOW, TIMESTAMP:" + timeStampRecord[i][6] + " , CURRENT VIDEO TIME:" + durationSeconds);
 					if (concurrentStamps<1) {
 						$('div#timeStamp' + i + '').addClass("timestamp-displaying");
-						$('div#timeStamp' + i + '').css('display', 'inline-block');
+						$('div#timeStamp' + i + '').css('display', 'block');
 						concurrentStamps++;
 					} else {
 //						$('div.timestamp-displaying').append('<div>Concurrent: ' + concurrentStamps + '</div>');
