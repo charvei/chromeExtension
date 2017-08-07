@@ -22,10 +22,8 @@ Next:
 
 
 document.addEventListener("spfdone", startRunning);
-//document.addEventListener("DOMContentLoaded", startRunning);
 var key = "key=AIzaSyDrusteFhAYvTfF77mYNL-7MDmso7UyuVs";
 var part = "part=snippet,replies";
-//var videoId = "videoId=apbSsILLh28";
 var videoId;
 var APIurl = "https://www.googleapis.com/youtube/v3/commentThreads";
 var maxResults = "maxResults=100";
@@ -33,7 +31,6 @@ var timeStampComments;
 var timeStampRecord;
 var jarray = 0;
 var timer;
-//videoLoaded; 0=video not loaded, 1=video has loaded for first time, 2=video has been loaded after more than 1 checks
 var videoLoaded = 0;
 $('<div id=timeStampList class=ytp-ad-progress-list"></div>').appendTo("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar > div.ytp-progress-list");
 //fetchComments();
@@ -128,21 +125,16 @@ function parseResponseForStamps(response) {
 	//I guess the latter...
 }
 
+//Old function not in use (attempts goal of popTimeStampElements() below)
 function makeTimeStampElements() {
-	//$('<div id=timeStampList"></div>').appendTo("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar > div.ytp-progress-list");
-
 	for (j=0; j<timeStampComments.length; j++) {
 		var id = "" + j;
-//		timeStampComments[j].push(j);
 		makeDivForTimeStamp(id, timeStampComments[j][0], timeStampComments[j][1], timeStampComments[j][6]);
 	}
 }
 
+//Pop timestamp array elements from global array and create timestamp page elements to page
 function popTimeStampElements() {
-	// for (i=0; i<timeStampComments.length; i++) {
-	// 	var id = "" + jarray++;
-	// 	console.log(jarray);
-	// }
 	while (timeStampComments.length>0) {
 		var id = "" + jarray++;
 		var timeStamp = timeStampComments.shift();
@@ -157,15 +149,10 @@ function popTimeStampElements() {
 function makeDivForTimeStamp(timeStampId, author, text, timeStamp) {
 	var videoDuration = $("#movie_player > div.html5-video-container > video").prop("duration");
 	var timeStampXPos = (timeStamp/videoDuration)*100;
-//	var timeStampXPos = videoDuration/timeStam;
 
 	console.log("TIMESTAMP AND VIDEODURATION: " + timeStamp + ", " + videoDuration);
 
-	//Just a test
 	$('<div id=timeStamp' + timeStampId + ' class="ytp-paid-content-overlay timestampcomment" aria-live="assertive" aria-atomic="true" data-layer="4" style="display: none; background-color:rgba(0, 0, 0, 0.7); border-radius: 5px; padding-left: 5px; padding-right: 5px; transform: translate(-50%, 0); left : 50%; font-size: 16px; font-family: Arial; position: absolute; z-index: 24; height: auto;">' + author + ': ' + text + '</div>').appendTo("div#movie_player");
-	//Add 'marker' in the progress bar... class: ytp-ad-progress'
-//	$('<div id=timeStampPosition' + timeStampId + ' class="ytp-timestamp" style="transform: scaleX(' + timeStampXPos + '); width: 6px; z-index: 36; background: #fc0; display: block;"></div>').appendTo("div#timeStampList");
-//	$('<div id=timeStampPosition' + timeStampId + ' class="ytp-ad-progress" style="transform: scaleX(' + timeStampXPos + '); width: 6px;"></div>').appendTo("div#timeStampList");
 	$('<div id=timeStampPosition' + timeStampId + ' class="ytp-ad-progress timestampmarker" style="left:' + timeStampXPos + '%; width: 6px; background: #0fb707;"></div>').appendTo("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar > div.ytp-progress-list");
 }
 
@@ -176,7 +163,6 @@ function convertStampToSeconds(timeStamp){
 	//00:00:00
 	if (timeStamp.length<6) {
 		//max digit represents minutes
-//		console.log("timest[0], [1] -->" + timeStampSplit[0]  + ", " + timeStampSplit[1]);
 		timeSeconds = (+timeStampSplit[0])*60 + (+timeStampSplit[1]);
 //		console.log("Timestamp: " + timeStamp + ", converted to seconds -> " + timeSeconds);
 		return timeSeconds;
@@ -342,10 +328,7 @@ function togglePanelDisplay() {
 	} else {
 		$('div#action-panel-timestamps').toggleClass("hid");
 		$('div#action-panel-timestamps').css('display', 'none');
-
-
 	}
-	
 }
 
 function makeActionPanel() {
