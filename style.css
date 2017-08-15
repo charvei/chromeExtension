@@ -20,23 +20,41 @@ div.timestampcomment {
     display: none; 
     background-color:rgba(0, 0, 0, 0.7); 
     border-radius: 2px; 
-    padding-left: 5px; 
-    padding-right: 5px; 
     transform: translate(-50%, 0); 
     left : 50%; 
-    font-size: 16px; 
+    font-size: 13px;
     font-family: Arial; 
     position: absolute;
     z-index: 24;
     height: auto;
     max-width: 80%;
-    min-width: 50%;
+    min-width: 30%;
     /*width:80%;*/
     line-height: 20px;
-    bottom : 40px;
     line-height: 20px;
-    padding : 5px;
+    padding : 0px 5px 0px 5px;
 }
+
+div#movie_player.ytp-autohide div.timestampcomment {
+    bottom : 5px;
+}
+
+#movie_player div.timestampcomment {
+    bottom : 44px;
+}
+
+div#movie_player.ytp-big-mode.ytp-autohide div.timestampcomment {
+    bottom : 5px;
+}
+
+div#movie_player.ytp-big-mode div.timestampcomment {
+    bottom : 64px;
+}
+
+
+
+
+
 
 div.commentAuthor {
     color : white;
@@ -65,6 +83,7 @@ div.commentDisplayPic {
     min-width : 25px;
     width : 10%;
     margin : 0 auto;
+    padding-top : 8px;
 }
 
 div.commentDisplayPic > img {
