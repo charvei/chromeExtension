@@ -1,21 +1,14 @@
 /*Things to do:
-	1. Make the comments popup divs look cool
-		a) Add profile pictures
-	2. Deal with overlapping timestamps
-	3. Deal with resetting timestamp markers (i think they remain if clicking a link to another video [spf stuff])
-	4. Make timestamps icons on progress bar appear as they're found, not after they're all found
-*/
+	1. Basic options:
+		>Enable/Disable the app by clicking the logo
+		>Settings like change the font size/colour???
+	2. Be able to reply to comments if you click/interact with them
+	3. Deal with overlapping timestamps
+	4. Deal with resetting timestamp markers (i think they remain if clicking a link to another video [spf stuff])
+	5. Deal with comments that are 3:20AM in the morning comments / bible quotes lol
+	6. Be able to hover over the timestamps to see a preview of them
+	
 
-
-/*
-I seem to have allowed for comments to be displayed as soon as they are found and not after they have all been retrieved
-this is great because now the app will not have to wait 40 seconds into a video to display the comments
-BUT:
->doesn't seem to be the best/most stable implementation, i'm kinda afraid of concurrency stuff with it.
-
-Next: 
-1)deal with video loading after timestamps resulting in NaN.
-2)make comment divs look good & deal with when multiple occur at once
 */
 
 /*Deal with multiple timestamps in the one comment: 1:30 for xxxx, 5:24 for xxxx*/
@@ -32,6 +25,7 @@ var timeStampRecord;
 var jarray = 0;
 var timer;
 var videoLoaded = 0;
+var maxCommentLength = 400;
 $('<div id=timeStampList class=ytp-ad-progress-list"></div>').appendTo("#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container > div.ytp-progress-bar > div.ytp-progress-list");
 //fetchComments();
 startRunning();
@@ -109,10 +103,16 @@ function parseResponseForStamps(response) {
 	var timeStamp;
 	for (i=0; i<response.items.length; i++) {
 		var text = response.items[i].snippet.topLevelComment.snippet.textOriginal;
+		console.log("text length : -> " + text.length);
+		//check if message text is too long
+		if (text.length > maxCommentLength) {
+			console.log("message is too long: +" + text.length + " characters.");
+			break;
+		}
 		//Pattern matching to find timestamp format
 		var regex = /\d\d:\d\d:\d\d|\d:\d\d:\d\d|\d\d:\d\d|\d:\d\d/;
 		if (timeStamp = text.match(regex)) {
-			console.log("timestamp found");
+			console.log("timestamp found that isn't too long");
 			var author = response.items[i].snippet.topLevelComment.snippet.authorDisplayName;
 			var likes = response.items[i].snippet.topLevelComment.snippet.likeCount;
 			var profilePicUrl = response.items[i].snippet.topLevelComment.snippet.authorProfileImageUrl;
@@ -153,7 +153,7 @@ function makeDivForTimeStamp(timeStampId, author, text, timeStamp, displayPic) {
 	console.log("TIMESTAMP AND VIDEODURATION: " + timeStamp + ", " + videoDuration);
 
 	//The Div containing message to be displayed @ timestamp time.
-	$('<div id=timeStamp' + timeStampId + ' class="ytp-paid-content-overlay timestampcomment" aria-live="assertive" aria-atomic="true" data-layer="4">' + '</div>').appendTo("div#movie_player");
+	$('<div id=timeStamp' + timeStampId + ' class="timestampcomment" aria-live="assertive" aria-atomic="true" data-layer="4">' + '</div>').appendTo("div#movie_player");
 	console.log("display pic ->" + displayPic);
 	$('<div class="commentDisplayPic">' + '<img src=' + displayPic + '></div>').appendTo('div#timeStamp' + timeStampId + '');
 	$('<div class="commentMessage"></div>').appendTo('div#timeStamp' + timeStampId + '');
@@ -214,6 +214,7 @@ function checkVideoCurrentTimePeriodically(){
 	*/
 
 	timer = setInterval(function() {
+			var commentHeight;
 			var concurrentStamps = 0;
 			var durationSeconds = $("#movie_player > div.html5-video-container > video").prop("currentTime");
 			if (((timeStampComments.length)>0) && videoHasLoaded()) {
@@ -229,6 +230,14 @@ function checkVideoCurrentTimePeriodically(){
 					if (concurrentStamps<1) {
 						$('div#timeStamp' + i + '').addClass("timestamp-displaying");
 						$('div#timeStamp' + i + '').css('display', 'block');
+					//	if (($('#movie_player').hasClass("paused-mode")) || (($('#movie_player').hasClass("paused-mode")))
+					/*	if ($('#movie_player').hasClass("ytp-autohide")) {
+							$('div#timeStamp' + i + '').css('bottom', '10px');
+						} else {
+							//commentHeight = $('#movie_player > div.ytp-chrome-bottom').css('bottom') + 10;
+							$('div#timeStamp' + i + '').css('bottom', ('50px'));
+						}
+					*/
 						concurrentStamps++;
 					} else {
 //						$('div.timestamp-displaying').append('<div>Concurrent: ' + concurrentStamps + '</div>');
@@ -243,7 +252,7 @@ function checkVideoCurrentTimePeriodically(){
 			}
 //			$('div.timestamp-displaying').append('<div>Concurrent: ' + concurrentStamps + '</div>');
 			console.log("Interval function run; currenttime:" + durationSeconds);
-		}, 1000);
+		}, 500);
 	return timer;
 }
 
@@ -254,7 +263,7 @@ function endTimer(timer){
 
 //Check if the current time of the video is within appropriate range to display timestamp(true) or not(false)
 function compareStampToVideoTime(timeStampTime, durationSeconds) {
-	if (((timeStampTime-1)<durationSeconds) && (durationSeconds<(timeStampTime+7))) {
+	if (((timeStampTime)<durationSeconds) && (durationSeconds<(timeStampTime+5))) {
 		//Video is currently within the time of a stamp
 		return true;
 	} else {

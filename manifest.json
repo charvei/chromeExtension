@@ -1,6 +1,6 @@
 {
 	"manifest_version" : 2,
-	"name" : "MyExtension",
+	"name" : "YouTube Timed Comments",
 	"description" : "This extension will display youtube timestamps found from comments",
 	"version" : "0.1",
 
